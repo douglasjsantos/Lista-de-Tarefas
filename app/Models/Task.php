@@ -9,7 +9,6 @@ class Task extends Model
     // Define os campos que podem ser preenchidos em massa (atribuição em massa)
     protected $fillable = [
         'title',
-        'description',
         'status',
         'user_id',  // Se a task pertence a um usuário, por exemplo
     ];

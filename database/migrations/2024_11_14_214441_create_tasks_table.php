@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('description')->nullable();
+            $table->text('title')->nullable();
             $table->enum('status', ['pendente', 'em andamento', 'concluída'])->default('pendente');
             $table->timestamps();
         });

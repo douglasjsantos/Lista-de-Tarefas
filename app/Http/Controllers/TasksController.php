@@ -15,6 +15,7 @@ class TasksController
     public function index()
     {
         $tasks = Task::all();
+        return response()->json($tasks);
     }
 
     /**
@@ -30,7 +31,14 @@ class TasksController
      */
     public function store(StoreTasksRequest $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'status' => 'required|in:pendente,em andamento,concluída'
+        ]);
+
+        $task = Task::create($request->all());
+
+        return response()->json($task, 201);
     }
 
     /**

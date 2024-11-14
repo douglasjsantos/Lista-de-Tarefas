@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
 
 class UserController
 {
@@ -13,7 +14,8 @@ class UserController
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return response()->json($users);
     }
 
     /**
@@ -27,10 +29,25 @@ class UserController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Validar os dados da requisição
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6'
+        ]);
+
+        // Criar um novo usuário com os dados fornecidos
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)  // Lembre-se de criptografar a senha
+        ]);
+
+        return response()->json(['message' => 'Usuário criado com sucesso!', 'user' => $user], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -61,6 +78,8 @@ class UserController
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return response()->json(['message' => 'Tarefa deletada com sucesso.']);
     }
 }
